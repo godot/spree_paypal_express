@@ -60,6 +60,7 @@ module Spree
       load_order
 
       opts = { :token => params[:token], :payer_id => params[:PayerID] }.merge all_opts(@order, params[:payment_method_id],  'payment')
+      opts[:tax] = 0 if opts[:tax] < 0
       gateway = paypal_gateway
 
       @ppx_details = gateway.details_for params[:token]
