@@ -30,10 +30,21 @@ module Spree
       load_order
       opts = all_opts(@order, params[:payment_method_id], 'payment')
 
-      if payment_method.preferred_cart_checkout
+      #if payment_method.preferred_cart_checkout
         opts.merge!(shipping_options)
+      #else
+      #  opts.merge!(address_options(@order))
+      #end
+      
+      
+      
+      if opts[:tax] > 0
+        opts[:money] = opts[:subtotal] + opts[:tax] + (@order.adjustment_total * 100).to_i  #opts[:shipping]
       else
-        opts.merge!(address_options(@order))
+        opts[:tax] = 0
+        opts[:handling] = 0
+
+        opts[:money] = opts[:subtotal] + opts[:shipping] #(@order.adjustment_total * 100).to_i   + opts[:tax]
       end
 
       @gateway = paypal_gateway
