@@ -89,6 +89,7 @@ module Spree
                                                   # phone is currently blanked in AM's PPX response lib
                                                   :phone      => @ppx_details.params["phone"] || "(not given)"
 
+          ship_address["state"] ||= 'nn'
           state = Spree::State.find_by_abbr(ship_address["state"].upcase) if ship_address["state"].present?
           if state
             order_ship_address.state = state
